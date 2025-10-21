@@ -115,7 +115,7 @@ program
     await auditSheets(dir, opts);
   });
 
-// Convert missing PDF for Word/Excel (alongside)
+// Office to PDF missing
 program
   .command('office2pdf-missing [dir]')
   .description('Convert Word/Excel files without same-name PDF to PDF (alongside)')
@@ -124,8 +124,29 @@ program
   .option('--overwrite', 'Also convert when PDF exists (overwrite)', false)
   .option('--dry-run', 'Preview conversions without exporting', false)
   .action(async (dir = '.', opts) => {
-    const officeMissing = require('../src/commands/officeToPdfMissing');
-    await officeMissing(dir, opts);
+    const office2pdfMissing = require('../src/commands/officeToPdfMissing');
+    await office2pdfMissing(dir, opts);
+  });
+
+// Count pages
+program
+  .command('count-pages [dir]')
+  .description('Count pages in Word/Excel documents (Excel: 1 sheet = 1 page)')
+  .option('--path <dir>', 'Directory to scan')
+  .option('--recursive', 'Scan subdirectories recursively', false)
+  .action(async (dir = '.', opts) => {
+    const countPages = require('../src/commands/countPages');
+    await countPages(dir, opts);
+  });
+
+// Compare directories
+program
+  .command('compare-dirs <before> <after>')
+  .description('Compare two directories and show file changes with page counts')
+  .option('--recursive', 'Scan subdirectories recursively', false)
+  .action(async (before, after, opts) => {
+    const compareDirs = require('../src/commands/compareDirs');
+    await compareDirs(before, after, opts);
   });
 
 program.parseAsync();

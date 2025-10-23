@@ -149,4 +149,15 @@ program
     await compareDirs(before, after, opts);
   });
 
+// Compare file existence
+program
+  .command('compare-files <dir1> <dir2>')
+  .description('Compare file existence between two directories')
+  .option('--recursive', 'Scan subdirectories recursively', false)
+  .option('--exclude <extensions>', 'Exclude file extensions (comma-separated, e.g., .txt,.log)')
+  .action(async (dir1, dir2, opts) => {
+    const compareFiles = require('../src/commands/compareFiles');
+    await compareFiles(dir1, dir2, opts);
+  });
+
 program.parseAsync();

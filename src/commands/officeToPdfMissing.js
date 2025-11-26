@@ -93,12 +93,18 @@ module.exports = async function officeToPdfMissing(dirArg, opts) {
     const hasPdf = fs.existsSync(pdfPath);
     if (hasPdf && !overwrite) {
       skippedExist++;
+      if (opts && typeof opts.onProgress === 'function') {
+        try { opts.onProgress({ type: 'skip', file: f.path, pdf: pdfPath }); } catch {}
+      }
       continue;
     }
 
     candidates++;
     if (dryRun) {
       console.log('[dry-run] 转为PDF:', f.path, '=>', pdfPath);
+      if (opts && typeof opts.onProgress === 'function') {
+        try { opts.onProgress({ type: 'dry-run', file: f.path, pdf: pdfPath }); } catch {}
+      }
       continue;
     }
     try {
@@ -111,9 +117,15 @@ module.exports = async function officeToPdfMissing(dirArg, opts) {
       }
       console.log('[ok] ', f.path, '=>', pdfPath);
       converted++;
+      if (opts && typeof opts.onProgress === 'function') {
+        try { opts.onProgress({ type: 'ok', file: f.path, pdf: pdfPath }); } catch {}
+      }
     } catch (e) {
       console.error('[fail]', f.path, e.message);
       failed++;
+      if (opts && typeof opts.onProgress === 'function') {
+        try { opts.onProgress({ type: 'fail', file: f.path, pdf: pdfPath, error: e.message }); } catch {}
+      }
     }
   }
 
@@ -124,4 +136,12 @@ module.exports = async function officeToPdfMissing(dirArg, opts) {
   console.log(`已存在跳过: ${skippedExist}`);
   console.log(`失败: ${failed}`);
   console.log('提示: 该功能依赖 Windows 下已安装的 Microsoft Word 与 Microsoft Excel。');
+  return {
+    total: officeFiles.length,
+    candidates,
+    converted,
+    skippedExist,
+    failed,
+    dryRun
+  };
 }

@@ -5,7 +5,8 @@
   "main": "bin/fileman.js",
   "scripts": {
     "test": "echo \"No tests yet\"",
-    "fileman": "node ./bin/fileman.js"
+    "fileman": "node ./bin/fileman.js",
+    "electron": "electron ./electron/main.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "commander": "^14.0.1",
     "mammoth": "^1.11.0",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7"
   }
 }

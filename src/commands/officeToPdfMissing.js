@@ -76,6 +76,7 @@ module.exports = async function officeToPdfMissing(dirArg, opts) {
 
   const entries = listDir(targetDir, recursive).filter(e => !e.isDir);
   const officeFiles = entries.filter(e => {
+    if (e.name.startsWith('~$')) return false;
     const ext = path.extname(e.name).toLowerCase();
     return WORD_EXTS.has(ext) || EXCEL_EXTS.has(ext);
   });

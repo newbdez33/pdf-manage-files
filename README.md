@@ -2,12 +2,11 @@
 
 Console CLI to help with file organization.
 
-Commands:
+## Commands
 
 - `organize [dir]` — Group files by `--by ext|date`, supports `--recursive` and `--dry-run`.
 - `tree [dir]` — Print a directory tree. Options: `--depth <n>`, `--dirs-first`.
 - `clean-empty [dir]` — Remove empty directories recursively.
-- `rename [dir]` — Batch rename files. Options: `--match <regex>`, `--replace <str>`, `--ext <.pdf>`, `--dry-run`.
 - `rename [dir]` — Batch rename files. Options: `--path <dir>`, `--match <regex>`, `--replace <str>`, `--ext <.pdf>`, `--dry-run`.
 - `dedupe [dir]` — Find duplicates by SHA-256; `--delete` removes duplicates, `--dry-run` previews.
 - `audit-nonpdf [dir]` — List all non-.pdf files and show if a same-name `.pdf` exists in the same folder. Options: `--path <dir>`, `--recursive`.
@@ -17,6 +16,12 @@ Commands:
   - Deletion: add `--delete-pdf` to remove same-name `.pdf` files next to matched Excel; combine with `--dry-run` to preview.
   - Conversion: add `--to-pdf` to convert matched Excel to PDF alongside (all sheets); use `--overwrite` to replace existing PDFs; `--dry-run` previews actions.
 - `office2pdf-missing [dir]` — Convert Word/Excel files without same-name `.pdf` to PDF (alongside). Options: `--path <dir>`, `--recursive`, `--dry-run`, `--overwrite`.
+- `count-pages [dir]` — Count pages in Word/Excel documents (Excel: 1 sheet = 1 page). Options: `--path <dir>`, `--recursive`.
+- `compare-dirs <before> <after>` — Compare two directories and show file changes with page counts. Options: `--recursive`.
+- `compare-files <dir1> <dir2>` — Compare file existence between two directories. Options: `--recursive`, `--exclude <extensions>`.
+
+> **Note on Excel/Word Automation**: 
+> All Office conversion commands (`excel2pdf`, `office2pdf-missing`, etc.) automatically set `AutomationSecurity=3` (Force Disable) to prevent VBA/Macro security dialogs from blocking execution.
 
 ## Install / Run
 
@@ -29,15 +34,18 @@ Optional global link: `npm link` then use `fileman` anywhere.
 
 ## Examples
 
-- Organize by extension: `npm run fileman -- organize c:\\path\\to\\folder --by ext`
+- Organize by extension: `npm run fileman -- organize c:\path\to\folder --by ext`
 - Organize by date (YYYY/MM): `npm run fileman -- organize . --by date --recursive`
 - Show tree depth 2: `npm run fileman -- tree . --depth 2 --dirs-first`
 - Clean empty dirs: `npm run fileman -- clean-empty .`
-- Rename PDFs in a specific folder: `npm run fileman -- rename --path c:\\path\\to\\folder --ext .pdf --match "-" --replace "_"`
+- Rename PDFs in a specific folder: `npm run fileman -- rename --path c:\path\to\folder --ext .pdf --match "-" --replace "_"`
 - Find duplicates: `npm run fileman -- dedupe .`
-- Audit non-PDFs: `npm run fileman -- audit-nonpdf --path c:\\path\\to\\folder --recursive`
-- Excel to PDF: `npm run fileman -- excel2pdf --path c:\\path\\to\\excel-folder --recursive --out c:\\path\\to\\pdfs`
-- Excel to PDF from list: `npm run fileman -- excel2pdf-list --list c:\\path\\to\\list.txt --out c:\\path\\to\\pdfs --overwrite`
-- Audit Excel sheets: `npm run fileman -- excel-audit-sheets --path c:\\path\\to\\excel-folder --recursive --min 2`
-  - With deletion preview: `npm run fileman -- excel-audit-sheets --path c:\\path\\to\\excel-folder --recursive --min 2 --delete-pdf --dry-run`
-  - Apply deletion: `npm run fileman -- excel-audit-sheets --path c:\\path\\to\\excel-folder --recursive --min 2 --delete-pdf`
+- Audit non-PDFs: `npm run fileman -- audit-nonpdf --path c:\path\to\folder --recursive`
+- Excel to PDF: `npm run fileman -- excel2pdf --path c:\path\to\excel-folder --recursive --out c:\path\to\pdfs`
+- Excel to PDF from list: `npm run fileman -- excel2pdf-list --list c:\path\to\list.txt --out c:\path\to\pdfs --overwrite`
+- Audit Excel sheets: `npm run fileman -- excel-audit-sheets --path c:\path\to\excel-folder --recursive --min 2`
+  - With deletion preview: `npm run fileman -- excel-audit-sheets --path c:\path\to\excel-folder --recursive --min 2 --delete-pdf --dry-run`
+  - Apply deletion: `npm run fileman -- excel-audit-sheets --path c:\path\to\excel-folder --recursive --min 2 --delete-pdf`
+- Convert missing Office files: `npm run fileman -- office2pdf-missing --path c:\path\to\folder --recursive`
+- Count pages: `npm run fileman -- count-pages --path c:\path\to\folder --recursive`
+- Compare directories: `npm run fileman -- compare-dirs c:\old\folder c:\new\folder --recursive`

@@ -17,9 +17,10 @@ function exportExcelToPdfViaPowerShell(inputPath, outputPath) {
   $ErrorActionPreference = 'Stop'
   $xlFixedFormatType = 0 # xlTypePDF
   $excel = New-Object -ComObject Excel.Application
+  $excel.AutomationSecurity = 3 # msoAutomationSecurityForceDisable
   try {
     $excel.DisplayAlerts = $false
-    $wb = $excel.Workbooks.Open("${inputPath.replace(/"/g, '""')}")
+    $wb = $excel.Workbooks.Open("${inputPath.replace(/"/g, '""')}", 0, $true)
     try {
       $wb.ExportAsFixedFormat($xlFixedFormatType, "${outputPath.replace(/"/g, '""')}")
     } finally {

@@ -18,9 +18,10 @@ function exportExcelToPdfViaPowerShell(inputPath, outputPath) {
   $ErrorActionPreference = 'Stop'
   $xlFixedFormatType = 0 # xlTypePDF
   $excel = New-Object -ComObject Excel.Application
+  $excel.AutomationSecurity = 3 # msoAutomationSecurityForceDisable
   try {
     $excel.DisplayAlerts = $false
-    $wb = $excel.Workbooks.Open("${inputPath.replace(/"/g, '""')}")
+    $wb = $excel.Workbooks.Open("${inputPath.replace(/"/g, '""')}", 0, $true)
     try {
       $wb.ExportAsFixedFormat($xlFixedFormatType, "${outputPath.replace(/"/g, '""')}")
     } finally {
@@ -42,9 +43,10 @@ function exportWordToPdfViaPowerShell(inputPath, outputPath) {
   $ErrorActionPreference = 'Stop'
   $wdExportFormatPDF = 17
   $word = New-Object -ComObject Word.Application
+  $word.AutomationSecurity = 3 # msoAutomationSecurityForceDisable
   try {
     $word.Visible = $false
-    $doc = $word.Documents.Open("${inputPath.replace(/"/g, '""')}")
+    $doc = $word.Documents.Open("${inputPath.replace(/"/g, '""')}", $false, $true)
     try {
       $doc.ExportAsFixedFormat("${outputPath.replace(/"/g, '""')}", $wdExportFormatPDF)
     } finally {
